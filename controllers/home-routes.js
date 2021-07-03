@@ -1,13 +1,14 @@
 const router = require('express').Router();
 const { Post, Comment, User } = require('../models/');
 
-// get all posts for homepage
+// Renders all posts for homepage
 router.get('/', async (req, res) => {
   try {
     const postData = await Post.findAll({
       include: [User],
     });
 
+    // Map method creats an array of all needed posts
     const posts = postData.map((post) => post.get({ plain: true }));
 
     res.render('all-posts', { posts });
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// get single post
+// get single post gy the ID
 router.get('/post/:id', async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
@@ -41,6 +42,7 @@ router.get('/post/:id', async (req, res) => {
   }
 });
 
+// reroute to the homepage if logged in
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect('/');
@@ -50,6 +52,7 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+// reroute to the homepage if logged in
 router.get('/signup', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect('/');

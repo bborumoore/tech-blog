@@ -11,7 +11,7 @@ Comment.init(
     }
   },
   {
-    sequelize
+    sequelize: sequelize
   }
 );
 

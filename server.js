@@ -11,7 +11,7 @@ const sequelize = require('./config/config');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const sess = {
-  secret: 'Super secret secret',
+  secret: 'Super duper secret',
   cookie: {},
   resave: false,
   saveUninitialized: true,
@@ -22,6 +22,7 @@ const sess = {
 
 app.use(session(sess));
 
+// Defining middleware for the app
 const hbs = exphbs.create({ helpers });
 
 app.engine('handlebars', hbs.engine);
@@ -31,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(require('./controllers/'));
+app.use(require('./controllers'));
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
