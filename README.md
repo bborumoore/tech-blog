@@ -21,11 +21,8 @@
   
   ---
   ## How to Use
-  Once the code is cloned, follow these steps:
-  1. Open your preferred sql tool and paste the code from db/schema, then run it.
-  2. In your terminal, run the command 'npm i'.
-  3. In your terminal, run the command 'node server.js'
-  4. Navigate to localhost:3001/ in your preferred browser. 
+  Once the code is cloned, you'll need to deploy it to a server-hosting site.  On that site you'll need access to an SQL database.
+  
   [Back to Top](#table-of-contents)
   
   ---
