@@ -1,21 +1,44 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 
+const startSession = (req, user) => new Promise((resolve, reject) => {
+  req.session.regenerate((regenerateErr) => {
+    if (regenerateErr) {
+      reject(regenerateErr);
+      return;
+    }
+
+    req.session.userId = user.id;
+    req.session.username = user.username;
+    req.session.loggedIn = true;
+
+    req.session.save((saveErr) => {
+      if (saveErr) {
+        reject(saveErr);
+        return;
+      }
+      resolve();
+    });
+  });
+});
+
 // Create a new user, then log them in using sessions
 router.post('/', async (req, res) => {
   try {
+    const username = typeof req.body.username === 'string' ? req.body.username.trim() : '';
+    const password = typeof req.body.password === 'string' ? req.body.password : '';
+    if (!username || password.length < 8) {
+      res.status(400).json({ message: 'Username and password (min 8 chars) are required.' });
+      return;
+    }
+
     const newUser = await User.create({
-      username: req.body.username,
-      password: req.body.password,
+      username,
+      password,
     });
 
-    req.session.save(() => {
-      req.session.userId = newUser.id;
-      req.session.username = newUser.username;
-      req.session.loggedIn = true;
-
-      res.json(newUser);
-    });
+    await startSession(req, newUser);
+    res.json(newUser);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -24,33 +47,35 @@ router.post('/', async (req, res) => {
 // Validate an existing user, then create a new session
 router.post('/login', async (req, res) => {
   try {
+    const username = typeof req.body.username === 'string' ? req.body.username.trim() : '';
+    const password = typeof req.body.password === 'string' ? req.body.password : '';
+    if (!username || !password) {
+      res.status(400).json({ message: 'Username and password are required.' });
+      return;
+    }
+
     const user = await User.findOne({
       where: {
-        username: req.body.username,
+        username,
       },
     });
 
     if (!user) {
-      res.status(400).json({ message: 'No user account found!' });
+      res.status(400).json({ message: 'Invalid username or password.' });
       return;
     }
 
-    const validPassword = user.checkPassword(req.body.password);
+    const validPassword = user.checkPassword(password);
 
     if (!validPassword) {
-      res.status(400).json({ message: 'No user account found!' });
+      res.status(400).json({ message: 'Invalid username or password.' });
       return;
     }
 
-    req.session.save(() => {
-      req.session.userId = user.id;
-      req.session.username = user.username;
-      req.session.loggedIn = true;
-
-      res.json({ user, message: 'You are now logged in!' });
-    });
+    await startSession(req, user);
+    res.json({ user, message: 'You are now logged in!' });
   } catch (err) {
-    res.status(400).json({ message: 'No user account found!' });
+    res.status(500).json({ message: 'Unable to complete login.' });
   }
 });
 
@@ -61,7 +86,7 @@ router.post('/logout', (req, res) => {
       res.status(204).end();
     });
   } else {
-    res.status(404).end();
+    res.status(204).end();
   }
 });
 

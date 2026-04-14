@@ -9,6 +9,7 @@ router.get('/', withAuth, async (req, res) => {
       where: {
         userId: req.session.userId,
       },
+      order: [['createdAt', 'DESC']],
     });
 
     const posts = postData.map((post) => post.get({ plain: true }));
@@ -18,7 +19,7 @@ router.get('/', withAuth, async (req, res) => {
       posts,
     });
   } catch (err) {
-    res.redirect('login');
+    res.redirect('/login');
   }
 });
 
@@ -32,7 +33,12 @@ router.get('/new', withAuth, (req, res) => {
 // Route to allow user to edit a post by ID
 router.get('/edit/:id', withAuth, async (req, res) => {
   try {
-    const postData = await Post.findByPk(req.params.id);
+    const postData = await Post.findOne({
+      where: {
+        id: req.params.id,
+        userId: req.session.userId,
+      },
+    });
 
     if (postData) {
       const post = postData.get({ plain: true });
@@ -45,7 +51,7 @@ router.get('/edit/:id', withAuth, async (req, res) => {
       res.status(404).end();
     }
   } catch (err) {
-    res.redirect('login');
+    res.redirect('/login');
   }
 });
 
