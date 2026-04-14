@@ -13,9 +13,12 @@
   <nav class="navbar">
     <ul>
       <li class="li-inline nav-item"><a href="/">Home</a></li>
-      <li class="li-inline nav-item"><a href="/dashboard">Dashboard</a></li>
-      <li class="li-inline nav-item"><a href="/login">Login</a></li>
-      <li class="li-inline nav-item"><a href="#" id="logout-link">Logout</a></li>
+      {{#if loggedIn}}
+        <li class="li-inline nav-item"><a href="/dashboard">Dashboard</a></li>
+        <li class="li-inline nav-item"><a href="#" id="logout-link">Logout</a></li>
+      {{else}}
+        <li class="li-inline nav-item"><a href="/login">Login</a></li>
+      {{/if}}
     </ul>
   </nav>
   <header class="hero">
@@ -32,4 +35,6 @@
 </body>
 
 </html>
-<script src="/js/logout.js"></script>
+{{#if loggedIn}}
+  <script src="/js/logout.js"></script>
+{{/if}}

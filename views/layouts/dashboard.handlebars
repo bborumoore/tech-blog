@@ -19,6 +19,9 @@
   </nav>
   <header class="hero">
     <h1 class="app-title"><a href="/dashboard">Your Dashboard</a></h1>
+    {{#if username}}
+      <p>Signed in as {{username}}</p>
+    {{/if}}
   </header>
 
   <main class="col-auto">

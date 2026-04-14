@@ -17,6 +17,8 @@ router.get('/', withAuth, async (req, res) => {
     res.render('all-posts-admin', {
       layout: 'dashboard',
       posts,
+      loggedIn: true,
+      username: req.session.username,
     });
   } catch (err) {
     res.redirect('/login');
@@ -27,6 +29,8 @@ router.get('/', withAuth, async (req, res) => {
 router.get('/new', withAuth, (req, res) => {
   res.render('new-post', {
     layout: 'dashboard',
+    loggedIn: true,
+    username: req.session.username,
   });
 });
 
@@ -46,6 +50,8 @@ router.get('/edit/:id', withAuth, async (req, res) => {
       res.render('edit-post', {
         layout: 'dashboard',
         post,
+        loggedIn: true,
+        username: req.session.username,
       });
     } else {
       res.status(404).end();
