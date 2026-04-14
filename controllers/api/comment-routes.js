@@ -7,8 +7,8 @@ router.post('/', withAuth, async (req, res) => {
   try {
     const body = typeof req.body.body === 'string' ? req.body.body.trim() : '';
     const postId = Number.parseInt(req.body.postId, 10);
-    if (!body || Number.isNaN(postId)) {
-      res.status(400).json({ message: 'A valid post and comment body are required.' });
+    if (!body || body.length > 1000 || Number.isNaN(postId)) {
+      res.status(400).json({ message: 'A valid post and comment body (max 1000 chars) are required.' });
       return;
     }
 

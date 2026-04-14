@@ -8,12 +8,29 @@ const normalizePostPayload = (payload) => {
   return { title, body };
 };
 
+const validatePostPayload = ({ title, body }) => {
+  if (!title || !body) {
+    return 'Title and body are required.';
+  }
+
+  if (title.length > 255) {
+    return 'Title must be 255 characters or fewer.';
+  }
+
+  if (body.length > 5000) {
+    return 'Body must be 5000 characters or fewer.';
+  }
+
+  return null;
+};
+
 // Allow a logged in user to create a new post
 router.post('/', withAuth, async (req, res) => {
   try {
     const { title, body } = normalizePostPayload(req.body);
-    if (!title || !body) {
-      res.status(400).json({ message: 'Title and body are required.' });
+    const validationError = validatePostPayload({ title, body });
+    if (validationError) {
+      res.status(400).json({ message: validationError });
       return;
     }
 
@@ -28,8 +45,9 @@ router.post('/', withAuth, async (req, res) => {
 router.put('/:id', withAuth, async (req, res) => {
   try {
     const { title, body } = normalizePostPayload(req.body);
-    if (!title || !body) {
-      res.status(400).json({ message: 'Title and body are required.' });
+    const validationError = validatePostPayload({ title, body });
+    if (validationError) {
+      res.status(400).json({ message: validationError });
       return;
     }
 

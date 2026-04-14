@@ -3,10 +3,14 @@ const postId = document.querySelector('input[name="post-id"]').value;
 const editFormHandler = async function(event) {
   event.preventDefault();
 
-  const title = document.querySelector('input[name="post-title"]').value;
-  const body = document.querySelector('textarea[name="post-body"]').value;
+  const title = document.querySelector('input[name="post-title"]').value.trim();
+  const body = document.querySelector('textarea[name="post-body"]').value.trim();
+  if (!title || !body) {
+    alert('A title and post body are required.');
+    return;
+  }
 
-  await fetch(`/api/post/${postId}`, {
+  const response = await fetch(`/api/post/${postId}`, {
     method: 'PUT',
     body: JSON.stringify({
       title,
@@ -17,15 +21,27 @@ const editFormHandler = async function(event) {
     }
   });
 
-  document.location.replace('/dashboard');
+  if (response.ok) {
+    document.location.replace('/dashboard');
+    return;
+  }
+
+  const responseBody = await response.json().catch(() => ({}));
+  alert(responseBody.message || 'Unable to update post.');
 };
 
 const deleteClickHandler = async function() {
-  await fetch(`/api/post/${postId}`, {
+  const response = await fetch(`/api/post/${postId}`, {
     method: 'DELETE'
   });
 
-  document.location.replace('/dashboard');
+  if (response.ok) {
+    document.location.replace('/dashboard');
+    return;
+  }
+
+  const responseBody = await response.json().catch(() => ({}));
+  alert(responseBody.message || 'Unable to delete post.');
 };
 
 document

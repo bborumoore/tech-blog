@@ -5,7 +5,7 @@ const commentFormHandler = async function(event) {
     const body = document.querySelector('textarea[name="comment-body"]').value;
   
     if (body) {
-      await fetch('/api/comment', {
+      const response = await fetch('/api/comment', {
         method: 'POST',
         body: JSON.stringify({
           postId,
@@ -15,8 +15,15 @@ const commentFormHandler = async function(event) {
           'Content-Type': 'application/json'
         }
       });
-  
-      document.location.reload();
+
+      if (response.ok) {
+        document.location.reload();
+      } else {
+        const errorPayload = await response.json().catch(() => ({}));
+        alert(errorPayload.message || 'Failed to submit comment.');
+      }
+    } else {
+      alert('Comment body is required.');
     }
   };
   
