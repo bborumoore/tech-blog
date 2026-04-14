@@ -1,46 +1,72 @@
 # Tech Blog
-  [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-  ---
-  ### Table of Contents
-  - [Descritption](#description)
-  - [Installation Instructions](#installation-instructions)
-  - [How To Use](#how-to-use)  
-  - [Contribution Guidelines](#contribution-guidelines)
-  - [Test Instructions](#test-instructions)
-  - [MIT License](#license) 
-  
-  ---
-  ## Description
-  This Project is a functioning blogsite with a rudimentary login system.  By logging in, you can then create, update, and delete your own blog posts, and comment on any blog post.
+A secure MVC tech blog/CMS built with Express, Sequelize, Handlebars, and session auth.
 
-  #### Installation Instructions
-  Clone this to your local machine, and run npm i to get all of the dependencies.  I have node.js installed, and this project uses the npm library.
-    
-  [Back to Top](#table-of-contents)
-  
-  ---
-  ## How to Use
-  Once the code is cloned, you'll need to deploy it to a server-hosting site.  On that site you'll need access to an SQL database.
-  
-  [Back to Top](#table-of-contents)
-  
-  ---
-  ## Contribution Guidelines
-  Please contribute, I need help. If you do actually want to add to this project, please reach out to me!  
-    
-  [Back to Top](#table-of-contents)
-  
-  ---
-  ## Test Instructions
-  `Run it and see if it works!`An NPM test using jest may be added at a later date.  
-    
-  #### License ####
-    The MIT license is used for this project.
-     
-  [Back to Top](#table-of-contents)
-  
-  ---
-  Questions? Reach out to me!
-  Github: [bborumoore](github.com/bborumoore)
-  Email: bborumoore@gmail.com
+## Features
+- Public homepage with recent posts.
+- User signup/login/logout with server-side sessions.
+- Authenticated dashboard to create, edit, and delete your own posts.
+- Commenting on posts for authenticated users.
+- CSRF protection on state-changing requests.
+- Rate-limiting and security headers via Helmet.
+
+## Tech Stack
+- Node.js + Express
+- Sequelize ORM
+- MySQL (default) or SQLite (supported for test/dev workflows)
+- express-session + connect-session-sequelize
+- express-handlebars
+- Jest + Supertest (integration tests)
+
+## Setup
+1. Clone and install:
+   ```bash
+   npm install
+   ```
+2. Copy env template and configure:
+   ```bash
+   cp .env.EXAMPLE .env
+   ```
+3. For MySQL local dev, create the DB:
+   ```bash
+   mysql -u <user> -p < db/schema.sql
+   ```
+4. Run migrations and optional seed data:
+   ```bash
+   npm run db:migrate
+   npm run db:seed
+   ```
+5. Start the app:
+   ```bash
+   npm start
+   ```
+
+## Environment Variables
+See `.env.EXAMPLE` for full values. Core variables:
+- `SESSION_SECRET` (required in production)
+- `DB_DIALECT` (`mysql` or `sqlite`)
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` (MySQL)
+- `DB_STORAGE` (SQLite file path or `:memory:`)
+- `JAWSDB_URL` (optional hosted MySQL connection URL)
+
+## Available Scripts
+- `npm start` - start app
+- `npm run dev` - start app in development mode
+- `npm test` - run Jest integration tests in SQLite memory DB
+- `npm run db:migrate` - apply migrations
+- `npm run db:migrate:undo` - roll back migrations
+- `npm run db:seed` - run seeders
+- `npm run db:reset` - full migration reset + seed
+
+## Security Notes
+- Session secrets and DB credentials are environment-driven.
+- Session cookies are hardened (`httpOnly`, `sameSite`, secure in production).
+- CSRF token is required for mutating routes.
+- Rate-limits are applied globally and to API/auth paths.
+
+## Contribution
+Issues and PRs are welcome.
+
+## License
+MIT
