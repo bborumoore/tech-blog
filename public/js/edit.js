@@ -17,8 +17,9 @@ const editFormHandler = async function(event) {
       body
     }),
     headers: {
-      'Content-Type': 'application/json'
-    }
+      ...window.TechBlogSecurity.withCsrfHeaders(),
+      'Content-Type': 'application/json',
+    },
   });
 
   if (response.ok) {
@@ -32,7 +33,8 @@ const editFormHandler = async function(event) {
 
 const deleteClickHandler = async function() {
   const response = await fetch(`/api/post/${postId}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: window.TechBlogSecurity.withCsrfHeaders(),
   });
 
   if (response.ok) {
