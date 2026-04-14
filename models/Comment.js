@@ -6,8 +6,12 @@ class Comment extends Model {}
 Comment.init(
   {
     body: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [1, 5000],
+      }
     }
   },
   {

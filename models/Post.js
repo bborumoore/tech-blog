@@ -5,8 +5,22 @@ class Post extends Model {}
 
 Post.init(
   {
-    title: DataTypes.STRING,
-    body: DataTypes.STRING
+    title: {
+      type: DataTypes.STRING(150),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [3, 150],
+      },
+    },
+    body: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [1, 20000],
+      },
+    }
   },
   {
     sequelize: sequelize
