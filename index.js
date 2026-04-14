@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const { create } = require('express-handlebars');
 const helpers = require('./utils/helpers');
 
@@ -37,6 +39,26 @@ if (isProduction) {
 
 app.use(session(sess));
 app.disable('x-powered-by');
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:'],
+      connectSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: null,
+    },
+  },
+}));
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+}));
 
 // Defining middleware for the app
 const hbs = create({ helpers });
