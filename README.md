@@ -58,6 +58,13 @@ See `.env.EXAMPLE` for full values. Core variables:
 - `npm run db:migrate:undo` - roll back migrations
 - `npm run db:seed` - run seeders
 - `npm run db:reset` - full migration reset + seed
+- `npm run db:migrate:test` - apply migrations in sqlite test DB
+- `npm run db:migrate:undo:test` - roll back sqlite test DB migrations
+- `npm run db:seed:test` - seed sqlite test DB
+- `npm run db:reset:test` - reset + seed sqlite test DB
+- `npm run db:migrate:test` - apply migrations for local SQLite test DB (`./db/test.sqlite`)
+- `npm run db:seed:test` - run seeders for local SQLite test DB (`./db/test.sqlite`)
+- `npm run db:reset:test` - reset SQLite test DB lifecycle
 
 ## Security Notes
 - Session secrets and DB credentials are environment-driven.

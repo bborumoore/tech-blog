@@ -10,7 +10,11 @@
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo:all",
     "db:seed": "sequelize-cli db:seed:all",
-    "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all"
+    "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all",
+    "db:migrate:test": "DB_DIALECT=sqlite DB_STORAGE=./db/test.sqlite sequelize-cli db:migrate --env test",
+    "db:seed:test": "DB_DIALECT=sqlite DB_STORAGE=./db/test.sqlite sequelize-cli db:seed:all --env test",
+    "db:migrate:undo:test": "DB_DIALECT=sqlite DB_STORAGE=./db/test.sqlite sequelize-cli db:migrate:undo:all --env test",
+    "db:reset:test": "DB_DIALECT=sqlite DB_STORAGE=./db/test.sqlite sequelize-cli db:migrate:undo:all --env test && DB_DIALECT=sqlite DB_STORAGE=./db/test.sqlite sequelize-cli db:migrate --env test && DB_DIALECT=sqlite DB_STORAGE=./db/test.sqlite sequelize-cli db:seed:all --env test"
   },
   "repository": {
     "type": "git",
