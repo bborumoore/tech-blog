@@ -73,6 +73,7 @@ typings/
 .env.*
 !.env.EXAMPLE
 !.env.example
+*.sqlite
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

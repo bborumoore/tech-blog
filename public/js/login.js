@@ -18,7 +18,7 @@ const loginFormHandler = async function(event) {
       username,
       password,
     }),
-    headers: { 'Content-Type': 'application/json' },
+    headers: window.TechBlogSecurity.withCsrfHeaders({ 'Content-Type': 'application/json' }),
   });
 
   if (response.ok) {

@@ -15,7 +15,7 @@ const newFormHandler = async function(event) {
       title,
       body,
     }),
-    headers: { 'Content-Type': 'application/json' },
+    headers: window.TechBlogSecurity.withCsrfHeaders({ 'Content-Type': 'application/json' }),
   });
 
   if (response.ok) {
